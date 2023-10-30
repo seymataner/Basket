@@ -1,11 +1,14 @@
-package com.shopping.cart.payload;
+package com.shopping.cart.dto.response;
+
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-public class CartResponse {
+@NoArgsConstructor
+public class RemoveItemResponse {
     private Boolean result;
     private String message;
 }
