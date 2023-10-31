@@ -26,21 +26,21 @@ public class CartController {
     }
 
     @PostMapping("/add-item")
-    public ResponseEntity<AddItemResponse> addItemToCart(@RequestBody AddItemRequest request){
+    public ResponseEntity<AddItemResponse> addItem(@RequestBody AddItemRequest request){
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(cartService.addItem(request));
     }
 
     @PostMapping("/add-vas-item")
-    public ResponseEntity<AddVasItemResponse> addItemToCart(@RequestBody AddVasItemRequest request) throws ItemNotFoundException {
+    public ResponseEntity<AddVasItemResponse> addVasItem(@RequestBody AddVasItemRequest request) throws ItemNotFoundException {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(cartService.addVasItem(request));
     }
 
     @DeleteMapping("/remove-item/{itemId}")
-    public ResponseEntity<RemoveItemResponse> removeItemFromCart(@PathVariable Integer itemId) throws ItemNotFoundException {
+    public ResponseEntity<RemoveItemResponse> removeItem(@PathVariable Integer itemId) throws ItemNotFoundException {
         RemoveItemRequest request = new RemoveItemRequest();
         request.setItemId(itemId);
         return ResponseEntity

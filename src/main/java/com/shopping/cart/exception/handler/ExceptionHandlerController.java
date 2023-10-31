@@ -19,7 +19,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(MaxUniqueItemQuantityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleMaxSizeExceededException(MaxUniqueItemQuantityException ex) {
+    public ResponseEntity<ErrorResponse> handleMaxUniqueItemQuantityException(MaxUniqueItemQuantityException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -31,9 +31,9 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(MaxSameItemQuantityException.class)
+    @ExceptionHandler(MaxSameDefaultItemQuantityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleMaxItemQuantityException(MaxSameItemQuantityException ex) {
+    public ResponseEntity<ErrorResponse> handleMaxItemQuantityException(MaxSameDefaultItemQuantityException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -47,10 +47,39 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(MaxSameItemToVasItemQuantityException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleVasItemPriceException(MaxSameItemToVasItemQuantityException ex) {
+    public ResponseEntity<ErrorResponse> handleMaxSameItemToVasItemQuantityException(MaxSameItemToVasItemQuantityException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(VasItemSellerIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleVasItemSellerIdException(VasItemSellerIdException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VasItemCategoryIdException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleVasItemCategoryIdException(VasItemCategoryIdException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(VasItemAddedNotFurnitureOrElectronicsException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleVasItemAddedNotFurnitureOrElectronicsException(VasItemAddedNotFurnitureOrElectronicsException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MaxSameDigitalItemQuantityException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleMaxSameDigitalItemQuantityException(MaxSameDigitalItemQuantityException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ErrorResponse> handleValidationException(ValidationException ex) {
