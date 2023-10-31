@@ -22,8 +22,15 @@ public class Converter {
         );
     }
 
-    public VasItem addVasItemRequestConvertToItem(AddVasItemRequest addVasItemRequest) {
-        return null;
+    public VasItem addVasItemRequestConvertToVasItem(AddVasItemRequest addVasItemRequest) {
+        return new VasItem(
+                addVasItemRequest.getItemId(),
+                addVasItemRequest.getVasItemId(),
+                addVasItemRequest.getVasCategoryId(),
+                addVasItemRequest.getVasSellerId(),
+                addVasItemRequest.getPrice(),
+                addVasItemRequest.getQuantity()
+        );
     }
 
 }

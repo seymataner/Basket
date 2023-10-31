@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class Cart {
+public class Cart { // Singleton Pattern
     private List<Item> items = new ArrayList<>();
     private static Cart instance = new Cart();
     private Cart() {
@@ -13,7 +13,6 @@ public class Cart {
     public static Cart getInstance() {
         return instance;
     }
-    public void addItem(Item item) {
-        items.add(item);
-    }
+
+
 }

@@ -12,5 +12,6 @@ public class VasItem {
     private Integer vasCategoryId;
     private Integer vasSellerId;
     private Double price;
+    private Integer quantity;
 
 }

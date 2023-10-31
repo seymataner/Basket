@@ -2,12 +2,11 @@ package com.shopping.cart.service;
 
 import com.shopping.cart.Converter.Converter;
 import com.shopping.cart.dto.request.AddItemRequest;
+import com.shopping.cart.dto.request.AddVasItemRequest;
 import com.shopping.cart.dto.request.RemoveItemRequest;
-import com.shopping.cart.dto.response.AddItemResponse;
-import com.shopping.cart.dto.response.DisplayCartResponse;
-import com.shopping.cart.dto.response.RemoveItemResponse;
-import com.shopping.cart.dto.response.ResetCartResponse;
-import com.shopping.cart.exception.BusinessException;
+import com.shopping.cart.dto.response.*;
+import com.shopping.cart.exception.ItemNotFoundException;
+import com.shopping.cart.exception.MaxSizeExceededException;
 import com.shopping.cart.model.Cart;
 import com.shopping.cart.model.Item;
 import com.shopping.cart.utils.Constants;
@@ -25,7 +24,7 @@ public class CartService {
 
     private Cart cart = Cart.getInstance();
     @Autowired
-    private Converter itemConverter;
+    private Converter conventer;
 
     public DisplayCartResponse displayCart() {
         DisplayCartResponse response = new DisplayCartResponse();
@@ -35,9 +34,10 @@ public class CartService {
         return response;
     }
 
-    public AddItemResponse addItem(AddItemRequest request) throws BusinessException {
+    public AddItemResponse addItem(AddItemRequest request){
+
         AddItemResponse response = new AddItemResponse();
-        cart.addItem(itemConverter.addItemRequestConvertToItem(request));
+        cart.getItems().add(conventer.addItemRequestConvertToItem(request));
         checkMaxUniqueItems(cart);
 
         response.setResult(Constants.SUCCESS_TRUE);
@@ -46,12 +46,27 @@ public class CartService {
         return response;
     }
 
-    public RemoveItemResponse removeItem(RemoveItemRequest request) throws BusinessException {
+    public AddVasItemResponse addVasItem(AddVasItemRequest request) throws ItemNotFoundException {
+        AddVasItemResponse response = new AddVasItemResponse();
+        cart.getItems().stream()
+                .filter(item -> item.getItemId() == request.getItemId())
+                .findFirst()
+                .orElseThrow(() -> new ItemNotFoundException())
+                .getVasItems()
+                .add(conventer.addVasItemRequestConvertToVasItem(request));
+
+        response.setResult(Constants.SUCCESS_TRUE);
+        response.setMessage(Constants.ADD_ITEM_MESSAGE);
+
+        return response;
+    }
+
+    public RemoveItemResponse removeItem(RemoveItemRequest request) throws ItemNotFoundException {
         RemoveItemResponse response = new RemoveItemResponse();
         Item itemToRemove = cart.getItems().stream()
                 .filter(item -> item.getItemId().equals(request.getItemId()))
                 .findFirst()
-                .orElseThrow(() -> new BusinessException("Item not found."));
+                .orElseThrow(() -> new ItemNotFoundException());
 
         cart.getItems().remove(itemToRemove);
         response.setResult(Constants.SUCCESS_TRUE);
@@ -69,14 +84,13 @@ public class CartService {
         return response;
     }
 
-    public void checkMaxUniqueItems(Cart cart) throws BusinessException {  // Check if the cart contains the maximum allowed unique items (10)
+    public void checkMaxUniqueItems(Cart cart) throws MaxSizeExceededException {  // Check if the cart contains the maximum allowed unique items (10)
         Set<Integer> uniqueItemIds = new HashSet<>();
         for (Item item : cart.getItems()) {
             uniqueItemIds.add(item.getItemId());
         }
-
-        if (uniqueItemIds.size() >= 10) {
-            throw new BusinessException("Cart is full. You cannot add more unique items.");
+        if (uniqueItemIds.size() > 10) {
+            throw new MaxSizeExceededException();
         }
     }
 
