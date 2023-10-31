@@ -1,8 +1,10 @@
 package com.shopping.cart.service;
 
+import com.shopping.cart.exception.MaxTotalPriceException;
 import com.shopping.cart.model.Cart;
 import com.shopping.cart.model.Item;
 import com.shopping.cart.model.Promotion;
+import com.shopping.cart.model.VasItem;
 import com.shopping.cart.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -35,7 +37,6 @@ public class PromotionService {
             cart.setAppliedPromotionId(selectedPromotion.getPromotionId());
             cart.setTotalDiscount(selectedPromotion.getTotalDiscount());
             cart.setTotalAmount(selectedPromotion.getTotalDiscountedAmount());
-
         }
     }
 

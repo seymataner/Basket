@@ -36,7 +36,7 @@ public class ValidationService {
     }
 
 
-    //** ADDITEM VALIDATION METHODS
+    //** ADD ITEM VALIDATION METHODS
     // Check if the cart contains the maximum allowed same default items (10)
     private void checkMaxSameDefaultItemQuantity(Cart cart, Integer itemId, Integer categoryId, Integer quantity) {
         Item item = findItemByItemId(cart, itemId);
@@ -75,7 +75,7 @@ public class ValidationService {
 
 
 
-    //** ADDVASITEM VALIDATION METHODS
+    //** ADD VAS ITEM VALIDATION METHODS
     private void checkVasItemSellerId(Integer vasSellerId) {
         if (!Objects.equals(vasSellerId, Constants.VAS_ITEM_SELLER_ID))
             throw new VasItemSellerIdException();

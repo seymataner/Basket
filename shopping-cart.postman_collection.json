@@ -1,0 +1,77 @@
+{
+	"info": {
+		"_postman_id": "32604431-3dce-47aa-b0df-9e8f53701e13",
+		"name": "shopping-cart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "14102619"
+	},
+	"item": [
+		{
+			"name": "display-cart",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://localhost:8080/api/cart/display-cart"
+			},
+			"response": []
+		},
+		{
+			"name": "add-item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 18,\r\n    \"categoryId\": 1001,\r\n    \"sellerId\":5004,\r\n    \"price\":135.0,\r\n    \"quantity\":2\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/cart/add-item"
+			},
+			"response": []
+		},
+		{
+			"name": "remove-item",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": "http://localhost:8080/api/cart/remove-item/18"
+			},
+			"response": []
+		},
+		{
+			"name": "reset-cart",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": "http://localhost:8080/api/cart/reset-cart"
+			},
+			"response": []
+		},
+		{
+			"name": "add-vas-item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"itemId\": 17,\r\n    \"vasItemId\":4545,\r\n    \"vasCategoryId\": 3242,\r\n    \"vasSellerId\": 5003,\r\n    \"price\":15.00,\r\n    \"quantity\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:8080/api/cart/add-vas-item"
+			},
+			"response": []
+		}
+	]
+}

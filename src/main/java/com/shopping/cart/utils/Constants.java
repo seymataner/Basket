@@ -19,5 +19,6 @@ public class Constants {
     public static final Integer ELECTRONIC_CATEGORY_ID = 3004;
     public static final Integer VAS_ITEM_SELLER_ID = 5003;
     public static final Integer VAS_ITEM_CATEGORY_ID = 3242;
+    public static final Double MAX_TOTAL_PRICE = 500_000.0;
 
 }

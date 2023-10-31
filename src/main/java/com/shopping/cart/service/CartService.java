@@ -39,18 +39,18 @@ public class CartService {
     }
 
     public AddItemResponse addItem(AddItemRequest request) {
+        Item item = converter.addItemRequestConvertToItem(request);
         validationService.validateAddItem(cart, request);
 
-        Item existingItem = findItemByItemId(request.getItemId());
+        Item existingItem = findItemByItemId(item.getItemId());
 
         if (existingItem != null) {
 
             existingItem.setQuantity(existingItem.getQuantity() + request.getQuantity());
         } else {
-            cart.getItems().add(converter.addItemRequestConvertToItem(request));
+            cart.getItems().add(item);
         }
         promotionService.calculateCart();
-
 
         AddItemResponse response = new AddItemResponse();
         response.setResult(Constants.TRUE);
@@ -60,14 +60,15 @@ public class CartService {
     }
 
     public AddVasItemResponse addVasItem(AddVasItemRequest request) {
+        VasItem vasItem = converter.addVasItemRequestConvertToVasItem(request);
         Item item = findItemByItemId(request.getItemId());
 
         if (item != null) {
-            VasItem vasItem = findVasItemByVasItemId(item, request.getVasItemId());
-            validationService.validateAddVasItem(cart, item, vasItem, request);
+            VasItem existingVasItem = findVasItemByVasItemId(item, request.getVasItemId());
+            validationService.validateAddVasItem(cart, item, existingVasItem, request);
 
-            if (vasItem != null) {
-                vasItem.setQuantity(vasItem.getQuantity() + request.getQuantity());
+            if (existingVasItem != null) {
+                existingVasItem.setQuantity(existingVasItem.getQuantity() + request.getQuantity());
             } else {
                 item.getVasItems().add(converter.addVasItemRequestConvertToVasItem(request));
             }
@@ -76,7 +77,6 @@ public class CartService {
         }
 
         promotionService.calculateCart();
-
         AddVasItemResponse response = new AddVasItemResponse();
         response.setResult(Constants.TRUE);
         response.setMessage(Constants.ADD_ITEM_MESSAGE);
