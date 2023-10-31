@@ -19,7 +19,7 @@ public class CartController {
 
     private final CartService cartService;
     @GetMapping("/display-cart")
-    public ResponseEntity<DisplayCartResponse> displayCart()throws ItemNotFoundException {
+    public ResponseEntity<DisplayCartResponse> displayCart() {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(cartService.displayCart());

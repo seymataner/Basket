@@ -5,9 +5,7 @@ import com.shopping.cart.dto.request.AddItemRequest;
 import com.shopping.cart.dto.request.AddVasItemRequest;
 import com.shopping.cart.dto.request.RemoveItemRequest;
 import com.shopping.cart.dto.response.*;
-import com.shopping.cart.exception.ItemNotFoundException;
-import com.shopping.cart.exception.MaxTotalItemException;
-import com.shopping.cart.exception.MaxUniqueItemException;
+import com.shopping.cart.exception.*;
 import com.shopping.cart.model.Cart;
 import com.shopping.cart.model.Item;
 import com.shopping.cart.model.VasItem;
@@ -36,13 +34,16 @@ public class CartService {
         return response;
     }
 
-    public AddItemResponse addItem(AddItemRequest request){
+    public AddItemResponse addItem(AddItemRequest request) {
+        checkMaxSameItems(request.getItemId(), request.getQuantity());
         checkMaxUniqueItems(cart, request.getItemId());
         checkMaxTotalItems(cart, request.getQuantity());
+
 
         Item existingItem = findItemByItemId(request.getItemId());
 
         if (existingItem != null) {
+
             existingItem.setQuantity(existingItem.getQuantity() + 1);
         } else {
             cart.getItems().add(converter.addItemRequestConvertToItem(request));
@@ -58,10 +59,14 @@ public class CartService {
     public AddVasItemResponse addVasItem(AddVasItemRequest request) throws ItemNotFoundException {
 
         checkMaxTotalItems(cart, request.getQuantity());
+
         Item item = findItemByItemId(request.getItemId());
 
         if (item != null) {
+            checkVasItemPrice(item.getPrice(), request.getPrice());
+
             VasItem existingVasItem = findVasItemByVasItemId(item, request.getVasItemId());
+            checkMaxVasItemToSameItem(item, existingVasItem, request.getVasItemId(), request.getQuantity());
 
             if (existingVasItem != null) {
                 existingVasItem.setQuantity(existingVasItem.getQuantity() + 1);
@@ -105,26 +110,40 @@ public class CartService {
         return response;
     }
 
-    public void checkMaxUniqueItems(Cart cart, Integer itemId) throws MaxUniqueItemException {  // Check if the cart contains the maximum allowed unique items (10) exclude: vasItem
+    public void checkMaxSameItems(Integer itemId, Integer quantity) throws MaxSameItemQuantityException {  // Check if the cart contains the maximum allowed same items (10)
+        Item item = findItemByItemId(itemId);
+        Integer totalQuantity = item != null ? item.getQuantity() + quantity : quantity;
+
+        if (totalQuantity > 10) throw new MaxSameItemQuantityException();
+    }
+
+    public void checkMaxVasItemToSameItem(Item item, VasItem vasItem, Integer vasItemId, Integer quantity) throws MaxSameItemQuantityException { // Check max 3 vasItem to same item
+        int vasItemQuantity = (vasItem != null) ? vasItem.getQuantity() + quantity : quantity;
+        if (vasItemQuantity > 3) throw new MaxSameItemToVasItemQuantityException();
+    }
+
+    public void checkVasItemPrice(Double itemPrice, Double vasItemPrice) {// Check max 3 vasItem to same item
+        if(itemPrice < vasItemPrice) throw new VasItemPriceException();
+    }
+
+
+    public void checkMaxUniqueItems(Cart cart, Integer itemId) throws MaxUniqueItemQuantityException {  // Check if the cart contains the maximum allowed unique items (10) exclude: vasItem
         Set<Integer> uniqueItemIds = new HashSet<>();
         for (Item item : cart.getItems()) {
             uniqueItemIds.add(item.getItemId());
         }
         uniqueItemIds.add(itemId);
-        if (uniqueItemIds.size() > 10) {
-            throw new MaxUniqueItemException();
-        }
+        if (uniqueItemIds.size() > 10) throw new MaxUniqueItemQuantityException();
+
     }
 
-    public void checkMaxTotalItems(Cart cart, Integer quantity) throws MaxUniqueItemException { // Check if the cart contains the maximum allowed items (30) include :vasItem
+    public void checkMaxTotalItems(Cart cart, Integer quantity) throws MaxUniqueItemQuantityException { // Check if the cart contains the maximum allowed items (30) include :vasItem
 
         int totalQuantity = cart.getItems().stream()
                 .mapToInt(i -> i.getQuantity() + i.getVasItems().size())
                 .sum();
 
-        if (totalQuantity + quantity > 30) {
-            throw new MaxTotalItemException();
-        }
+        if (totalQuantity + quantity > 30) throw new MaxTotalItemQuantityException();
     }
 
     public Item findItemByItemId(Integer itemId) { // Check if the cart contains the maximum allowed items (30) include :vasItem
@@ -135,9 +154,9 @@ public class CartService {
                 .orElse(null);
     }
 
-    private VasItem findVasItemByVasItemId(Item item, int vasItemId) {
+    private VasItem findVasItemByVasItemId(Item item, Integer vasItemId) {
         return item.getVasItems().stream()
-                .filter(vasItem -> vasItem.getVasItemId() == vasItemId)
+                .filter(vasItem -> Objects.equals(vasItem.getVasItemId(), vasItemId))
                 .findFirst()
                 .orElse(null);
     }

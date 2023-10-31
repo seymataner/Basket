@@ -1,4 +1,4 @@
-package com.shopping.cart.dto.response;
+package com.shopping.cart.exception.handler;
 
 import lombok.Data;
 

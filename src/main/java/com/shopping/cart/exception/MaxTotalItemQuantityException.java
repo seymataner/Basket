@@ -1,9 +1,9 @@
 package com.shopping.cart.exception;
 
-public class MaxTotalItemException extends RuntimeException  {
+public class MaxTotalItemQuantityException extends RuntimeException  {
 
     private static final String message = "Cart can contain a maximum of 30 items";
-    public MaxTotalItemException() {
+    public MaxTotalItemQuantityException() {
         super(message);
     }
 }
