@@ -7,7 +7,6 @@ import com.shopping.cart.model.Cart;
 import com.shopping.cart.model.Item;
 import com.shopping.cart.model.VasItem;
 import com.shopping.cart.utils.Constants;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -16,14 +15,6 @@ import java.util.Set;
 
 @Component
 public class ValidationService {
-
-    private final PromotionService promotionService;
-
-    @Autowired
-    public ValidationService(PromotionService promotionService) {
-        this.promotionService = promotionService;
-    }
-
 
     public void validateAddItem(Cart cart, AddItemRequest request) {
         checkMaxSameDefaultItemQuantity(cart, request.getItemId(), request.getCategoryId(), request.getQuantity());

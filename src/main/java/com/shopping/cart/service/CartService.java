@@ -17,14 +17,14 @@ import java.util.Objects;
 @Service
 public class CartService {
 
-    private final Cart cart = Cart.getInstance();
+    private final Cart cart;
     private final Converter converter;
-
     private final ValidationService validationService;
     private final PromotionService promotionService;
 
     @Autowired
-    public CartService(Converter converter, ValidationService validationService, PromotionService promotionService) {
+    public CartService(Cart cart, Converter converter, ValidationService validationService, PromotionService promotionService) {
+        this.cart = cart;
         this.converter = converter;
         this.validationService = validationService;
         this.promotionService = promotionService;
@@ -33,7 +33,7 @@ public class CartService {
     public DisplayCartResponse displayCart() {
         DisplayCartResponse response = new DisplayCartResponse();
         response.setResult(Constants.TRUE);
-        response.setItems(cart.getItems());
+        response.setCart(cart);
 
         return response;
     }
@@ -49,7 +49,7 @@ public class CartService {
         } else {
             cart.getItems().add(converter.addItemRequestConvertToItem(request));
         }
-        promotionService.calculateCart(cart);
+        promotionService.calculateCart();
 
 
         AddItemResponse response = new AddItemResponse();
@@ -59,7 +59,7 @@ public class CartService {
         return response;
     }
 
-    public AddVasItemResponse addVasItem(AddVasItemRequest request) throws ItemNotFoundException {
+    public AddVasItemResponse addVasItem(AddVasItemRequest request) {
         Item item = findItemByItemId(request.getItemId());
 
         if (item != null) {
@@ -75,7 +75,7 @@ public class CartService {
             throw new ItemNotFoundException();
         }
 
-        promotionService.calculateCart(cart);
+        promotionService.calculateCart();
 
         AddVasItemResponse response = new AddVasItemResponse();
         response.setResult(Constants.TRUE);
@@ -84,7 +84,7 @@ public class CartService {
         return response;
     }
 
-    public RemoveItemResponse removeItem(RemoveItemRequest request) throws ItemNotFoundException {
+    public RemoveItemResponse removeItem(RemoveItemRequest request) {
 
         Item itemToRemove = cart.getItems().stream()
                 .filter(item -> item.getItemId().equals(request.getItemId()))
@@ -92,7 +92,7 @@ public class CartService {
                 orElseThrow(ItemNotFoundException::new);
 
         cart.getItems().remove(itemToRemove);
-        promotionService.calculateCart(cart);
+        promotionService.calculateCart();
 
         RemoveItemResponse response = new RemoveItemResponse();
         response.setResult(Constants.TRUE);
@@ -103,7 +103,7 @@ public class CartService {
 
     public ResetCartResponse resetCart() {
         cart.getItems().clear();
-        promotionService.calculateCart(cart);
+        promotionService.calculateCart();
 
         ResetCartResponse response = new ResetCartResponse();
         response.setResult(Constants.TRUE);
@@ -113,7 +113,7 @@ public class CartService {
     }
 
 
-    public Item findItemByItemId(Integer itemId) {
+    private Item findItemByItemId(Integer itemId) {
 
         return cart.getItems().stream().filter(item ->
                 Objects.equals(item.getItemId(), itemId)).findFirst().orElse(null);
