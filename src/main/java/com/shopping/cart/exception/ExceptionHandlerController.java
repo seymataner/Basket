@@ -17,9 +17,16 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(MaxSizeExceededException.class)
+    @ExceptionHandler(MaxUniqueItemException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleMaxSizeExceededException(MaxSizeExceededException ex) {
+    public ResponseEntity<ErrorResponse> handleMaxSizeExceededException(MaxUniqueItemException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(MaxTotalItemException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleMaxTotalItemException(MaxTotalItemException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
