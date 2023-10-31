@@ -1,4 +1,4 @@
-package com.shopping.cart.Converter;
+package com.shopping.cart.converter;
 
 import com.shopping.cart.dto.request.AddItemRequest;
 import com.shopping.cart.dto.request.AddVasItemRequest;

@@ -1,6 +1,6 @@
 package com.shopping.cart.service;
 
-import com.shopping.cart.Converter.Converter;
+import com.shopping.cart.converter.Converter;
 import com.shopping.cart.dto.request.AddItemRequest;
 import com.shopping.cart.dto.request.AddVasItemRequest;
 import com.shopping.cart.dto.request.RemoveItemRequest;

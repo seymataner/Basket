@@ -2,10 +2,10 @@ package com.shopping.cart.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-//{"command":"addVasItemToItem", "payload": {"itemId": int, "vasItemId":int, "vasCategoryId": int, "vasSellerId":int, "price":double, "quantity":int}}
+import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class VasItem {
     private Integer itemId;
     private Integer vasItemId;

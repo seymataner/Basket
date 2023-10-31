@@ -66,9 +66,9 @@ public class ExceptionHandlerController {
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(VasItemAddedNotFurnitureOrElectronicsException.class)
+    @ExceptionHandler(VasItemNotAllowedCategoryException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorResponse> handleVasItemAddedNotFurnitureOrElectronicsException(VasItemAddedNotFurnitureOrElectronicsException ex) {
+    public ResponseEntity<ErrorResponse> handleVasItemAddedNotFurnitureOrElectronicsException(VasItemNotAllowedCategoryException ex) {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
@@ -79,6 +79,13 @@ public class ExceptionHandlerController {
         ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+    @ExceptionHandler(ItemSellerIdNotAllowedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorResponse> handleItemSellerIdNotAllowedException(ItemSellerIdNotAllowedException ex) {
+        ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 
     @ExceptionHandler(ValidationException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)

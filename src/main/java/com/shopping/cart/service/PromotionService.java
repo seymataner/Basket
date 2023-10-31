@@ -29,7 +29,7 @@ public class PromotionService {
         } else {
             List<Promotion> promotions = new ArrayList<>();
             promotions.add(calculateSameSellerPromotion());
-            //promotions.add(calculateCategoryPromotion());
+            promotions.add(calculateCategoryPromotion());
             promotions.add(calculateTotalPromotion());
             Promotion selectedPromotion = findMostAdvantageousPromotion(promotions);
             cart.setAppliedPromotionId(selectedPromotion.getPromotionId());
@@ -41,25 +41,35 @@ public class PromotionService {
 
     private Promotion calculateSameSellerPromotion() {
         Promotion promotion = new Promotion();
-        promotion.setPromotionId(Constants.CATEGORY_PROMOTION_ID);
+        promotion.setPromotionId(Constants.SAME_SELLER_PROMOTION_ID);
         Set<Integer> uniqueSellerIds = cart.getItems().stream()
                 .map(Item::getSellerId)
                 .collect(Collectors.toSet());
-        if(uniqueSellerIds.size() == 1){
-            promotion.setTotalDiscount(calculateDefaultTotalPrice()*0.1);
-            promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice()*0.9);
+        if (uniqueSellerIds.size() == 1) {
+            promotion.setTotalDiscount(calculateDefaultTotalPrice() * 0.1);
+            promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice() * 0.9);
         }
 
-      return promotion;
+        return promotion;
     }
 
-    private Promotion calculateCategoryPromotion () {
-        return new Promotion();
-    }
-
-    private Promotion calculateTotalPromotion () {
+    private Promotion calculateCategoryPromotion() {
         Promotion promotion = new Promotion();
-        promotion.setPromotionId(Constants.SAME_SELLER_PROMOTION_ID);
+        promotion.setPromotionId(Constants.CATEGORY_PROMOTION_ID);
+        List<Item> filteredItems = cart.getItems().stream()
+                .filter(item -> Objects.equals(item.getCategoryId(), Constants.DISCOUNTED_CATEGORY_ID))
+                .collect(Collectors.toList());
+        double totalDiscount = filteredItems.stream()
+                .mapToDouble(item -> item.getPrice() * item.getQuantity() * 0.05)
+                .sum();
+        promotion.setTotalDiscount(totalDiscount);
+        promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice() - totalDiscount);
+        return promotion;
+    }
+
+    private Promotion calculateTotalPromotion() {
+        Promotion promotion = new Promotion();
+        promotion.setPromotionId(Constants.TOTAL_PRICE_PROMOTION_ID);
         double defaultAmount = calculateDefaultTotalPrice();
         if (defaultAmount >= 50_000) {
             promotion.setTotalDiscount(2_000.00);
