@@ -30,8 +30,9 @@ public class ValidationService {
         checkVasItemCategoryId(request.getVasCategoryId());
         checkMaxTotalItemQuantity(cart, request.getQuantity());
         checkVasItemNotAllowedCategory(item.getCategoryId());
-        checkVasItemPrice(item.getPrice(), request.getPrice());
         checkMaxSameItemToVasItemQuantity(vasItem, request.getQuantity());
+        checkVasItemPrice(item.getPrice(), request.getPrice());
+
 
     }
 
@@ -42,13 +43,13 @@ public class ValidationService {
         Item item = findItemByItemId(cart, itemId);
         int totalQuantity = item != null ? item.getQuantity() + quantity : quantity;
 
-        if (totalQuantity > 10 &&  (!Objects.equals(categoryId, Constants.DIGITAL_CATEGORY_ID)))
+        if (totalQuantity > 10 && (!Objects.equals(categoryId, Constants.DIGITAL_CATEGORY_ID)))
             throw new MaxSameDefaultItemQuantityException();
     }
 
     // Check if the cart contains the maximum allowed same digital items (5)
     private void checkMaxSameDigitalItemQuantity(Cart cart, Integer itemId, Integer categoryId, Integer quantity) {
-        Item item = findItemByItemId( cart, itemId);
+        Item item = findItemByItemId(cart, itemId);
         int totalQuantity = item != null ? item.getQuantity() + quantity : quantity;
 
         if (totalQuantity > 5 && (Objects.equals(categoryId, Constants.DIGITAL_CATEGORY_ID)))
@@ -72,7 +73,6 @@ public class ValidationService {
         if (Objects.equals(vasSellerId, Constants.VAS_ITEM_SELLER_ID))
             throw new ItemSellerIdNotAllowedException();
     }
-
 
 
     //** ADD VAS ITEM VALIDATION METHODS

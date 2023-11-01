@@ -33,7 +33,7 @@ public class PromotionService {
             promotions.add(calculateSameSellerPromotion());
             promotions.add(calculateCategoryPromotion());
             promotions.add(calculateTotalPromotion());
-            Promotion selectedPromotion = findMostAdvantageousPromotion(promotions);
+            Promotion selectedPromotion = findOptimalPricePromotion(promotions);
             cart.setAppliedPromotionId(selectedPromotion.getPromotionId());
             cart.setTotalDiscount(selectedPromotion.getTotalDiscount());
             cart.setTotalAmount(selectedPromotion.getTotalDiscountedAmount());
@@ -88,7 +88,7 @@ public class PromotionService {
         return promotion;
     }
 
-    private Promotion findMostAdvantageousPromotion(List<Promotion> promotions) {
+    private Promotion findOptimalPricePromotion(List<Promotion> promotions) {
         return promotions.stream()
                 .min(Comparator.comparingDouble(Promotion::getTotalDiscountedAmount))
                 .orElse(new Promotion());
@@ -106,4 +106,29 @@ public class PromotionService {
                 .sum();
     }
 
+    public void checkTotalPriceAfterAddingItem(Item newItem) {
+        if (cart.getTotalAmount() > Constants.MAX_TOTAL_PRICE) {
+            Item existingItem = cart.getItems().stream().filter(item ->
+                    Objects.equals(item.getItemId(), newItem.getItemId())).findFirst().orElse(null);
+            if (existingItem != null && existingItem.getQuantity() > newItem.getQuantity())
+                existingItem.setQuantity(existingItem.getQuantity() - newItem.getQuantity());
+            else
+                cart.getItems().remove(newItem);
+            calculateCart();
+            throw new MaxTotalPriceException();
+        }
+    }
+
+    public void checkTotalPriceAfterAddingVasItem(Item existingItem, VasItem newVasItem) {
+        if (cart.getTotalAmount() > Constants.MAX_TOTAL_PRICE) {
+            VasItem existingVasItem = existingItem.getVasItems().stream().filter(vasItem ->
+                    Objects.equals(vasItem.getVasItemId(), newVasItem.getVasItemId())).findFirst().orElse(null);
+            if (existingVasItem != null && existingVasItem.getQuantity() > newVasItem.getQuantity())
+                existingVasItem.setQuantity(existingVasItem.getQuantity() - newVasItem.getQuantity());
+            else
+                existingItem.getVasItems().remove(newVasItem);
+            calculateCart();
+            throw new MaxTotalPriceException();
+        }
+    }
 }

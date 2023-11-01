@@ -12,6 +12,7 @@ import com.shopping.cart.model.VasItem;
 import com.shopping.cart.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.Objects;
 
 @Service
@@ -39,18 +40,20 @@ public class CartService {
     }
 
     public AddItemResponse addItem(AddItemRequest request) {
-        Item item = converter.addItemRequestConvertToItem(request);
+        Item newItem = converter.addItemRequestConvertToItem(request);
         validationService.validateAddItem(cart, request);
 
-        Item existingItem = findItemByItemId(item.getItemId());
+        Item existingItem = findItemByItemId(request.getItemId());
 
         if (existingItem != null) {
 
             existingItem.setQuantity(existingItem.getQuantity() + request.getQuantity());
         } else {
-            cart.getItems().add(item);
+
+            cart.getItems().add(newItem);
         }
         promotionService.calculateCart();
+        promotionService.checkTotalPriceAfterAddingItem(newItem);
 
         AddItemResponse response = new AddItemResponse();
         response.setResult(Constants.TRUE);
@@ -60,23 +63,25 @@ public class CartService {
     }
 
     public AddVasItemResponse addVasItem(AddVasItemRequest request) {
-        VasItem vasItem = converter.addVasItemRequestConvertToVasItem(request);
-        Item item = findItemByItemId(request.getItemId());
+        VasItem newVasItem = converter.addVasItemRequestConvertToVasItem(request);
+        Item existingItem = findItemByItemId(request.getItemId());
 
-        if (item != null) {
-            VasItem existingVasItem = findVasItemByVasItemId(item, request.getVasItemId());
-            validationService.validateAddVasItem(cart, item, existingVasItem, request);
+        if (existingItem != null) {
+            VasItem existingVasItem = findVasItemByVasItemId(existingItem, request.getVasItemId());
+            validationService.validateAddVasItem(cart, existingItem, existingVasItem, request);
 
             if (existingVasItem != null) {
                 existingVasItem.setQuantity(existingVasItem.getQuantity() + request.getQuantity());
             } else {
-                item.getVasItems().add(converter.addVasItemRequestConvertToVasItem(request));
+                existingItem.getVasItems().add(newVasItem);
             }
         } else {
             throw new ItemNotFoundException();
         }
 
         promotionService.calculateCart();
+        promotionService.checkTotalPriceAfterAddingVasItem(existingItem, newVasItem);
+
         AddVasItemResponse response = new AddVasItemResponse();
         response.setResult(Constants.TRUE);
         response.setMessage(Constants.ADD_ITEM_MESSAGE);
