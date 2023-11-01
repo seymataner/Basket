@@ -39,8 +39,7 @@ public class CartController {
                 .body(cartService.addVasItem(request));
     }
 
-    // @DeleteMapping("/remove-item/{itemId}") -> using @PathVariable
-    @PostMapping("/add-vas-item")
+    @PostMapping("/remove-item")
     public ResponseEntity<RemoveItemResponse> removeItem(@RequestBody RemoveItemRequest request) throws ItemNotFoundException {
         return ResponseEntity
                 .status(HttpStatus.OK)

@@ -22,7 +22,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"itemId\": 18,\r\n    \"categoryId\": 1001,\r\n    \"sellerId\":5004,\r\n    \"price\":135.0,\r\n    \"quantity\":2\r\n}\r\n",
+					"raw": "{\r\n    \"itemId\": 29,\r\n    \"categoryId\": 1001,\r\n    \"sellerId\":5024,\r\n    \"price\":135.0,\r\n    \"quantity\":1\r\n}\r\n",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -36,13 +36,18 @@
 		{
 			"name": "remove-item",
 			"request": {
-				"method": "DELETE",
+				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": ""
+					"raw": "{\r\n    \"itemId\": 29\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
 				},
-				"url": "http://localhost:8080/api/cart/remove-item/18"
+				"url": "http://localhost:8080/api/cart/remove-item"
 			},
 			"response": []
 		},
@@ -62,7 +67,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"itemId\": 17,\r\n    \"vasItemId\":4545,\r\n    \"vasCategoryId\": 3242,\r\n    \"vasSellerId\": 5003,\r\n    \"price\":15.00,\r\n    \"quantity\":1\r\n}",
+					"raw": "{\r\n    \"itemId\": 20,\r\n    \"vasItemId\":4545,\r\n    \"vasCategoryId\": 3242,\r\n    \"vasSellerId\": 5003,\r\n    \"price\":135.0,\r\n    \"quantity\":3\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

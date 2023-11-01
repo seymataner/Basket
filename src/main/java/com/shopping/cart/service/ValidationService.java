@@ -36,7 +36,6 @@ public class ValidationService {
 
     }
 
-
     //** ADD ITEM VALIDATION METHODS
     // Check if the cart contains the maximum allowed same default items (10)
     private void checkMaxSameDefaultItemQuantity(Cart cart, Integer itemId, Integer categoryId, Integer quantity) {

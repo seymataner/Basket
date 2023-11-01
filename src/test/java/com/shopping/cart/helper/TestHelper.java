@@ -2,13 +2,52 @@ package com.shopping.cart.helper;
 
 import com.shopping.cart.dto.request.AddItemRequest;
 import com.shopping.cart.dto.request.AddVasItemRequest;
+import com.shopping.cart.model.Cart;
+import com.shopping.cart.model.Item;
 import com.shopping.cart.utils.Constants;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class TestHelper {
 
+    //CART
+    public static Cart createSampleCart() {
+        Cart cart = new Cart();
+        cart.setItems(new ArrayList<>());
+        cart.setTotalAmount(0.0);
+        cart.setAppliedPromotionId(0);
+        cart.setTotalDiscount(10.0);
+        return cart;
+    }
+
+
+    public static List<Item> createUniqueItems() {
+
+        return IntStream.range(1, 11)
+                .mapToObj(i -> new Item(i, 100 + i, 200 + i, 19.99 * i, 1, new ArrayList<>()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Item> createMaxItems() {
+        List<Item> items = new ArrayList<>();
+        items.addAll(IntStream.range(1, 11)
+                .mapToObj(i -> new Item(1, 100 + i, 200 + i, 19.99 * i, 1, new ArrayList<>()))
+                .collect(Collectors.toList()));
+
+        items.addAll(IntStream.range(1, 11)
+                .mapToObj(i -> new Item(2, 100 + i, 200 + i, 19.99 * i, 1, new ArrayList<>()))
+                .collect(Collectors.toList()));
+        items.addAll(IntStream.range(1, 11)
+                .mapToObj(i -> new Item(3, 100 + i, 200 + i, 19.99 * i, 1, new ArrayList<>()))
+                .collect(Collectors.toList()));
+
+        return items;
+    }
+
     //ADD ITEM
-
-
     public static AddItemRequest createValidItemRequest() {
         AddItemRequest request = new AddItemRequest();
         request.setItemId(1);
@@ -46,6 +85,16 @@ public class TestHelper {
         request.setSellerId(3);
         request.setPrice(10.0);
         request.setQuantity(6);
+        return request;
+    }
+
+    public static AddItemRequest createNotAllowedTotalQuantityItemRequest() {
+        AddItemRequest request = new AddItemRequest();
+        request.setItemId(15);
+        request.setCategoryId(1234);
+        request.setSellerId(3);
+        request.setPrice(10.0);
+        request.setQuantity(1);
         return request;
     }
 
