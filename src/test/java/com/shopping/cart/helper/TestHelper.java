@@ -19,8 +19,29 @@ public class TestHelper {
         cart.setItems(new ArrayList<>());
         cart.setTotalAmount(0.0);
         cart.setAppliedPromotionId(0);
-        cart.setTotalDiscount(10.0);
+        cart.setTotalDiscount(0.0);
         return cart;
+    }
+
+    public static Item createSampleItem() {
+        Item item = new Item();
+        item.setItemId(1);
+        item.setCategoryId(Constants.FURNITURE_CATEGORY_ID);
+        item.setSellerId(3);
+        item.setPrice(10.0);
+        item.setQuantity(1);
+        item.setVasItems(new ArrayList<>());
+        return item;
+    }
+    public static Item createSampleItem2() {
+        Item item = new Item();
+        item.setItemId(2);
+        item.setCategoryId(1234);
+        item.setSellerId(3);
+        item.setPrice(10.0);
+        item.setQuantity(1);
+        item.setVasItems(new ArrayList<>());
+        return item;
     }
 
 
@@ -108,26 +129,6 @@ public class TestHelper {
         return request;
     }
 
-    public static AddItemRequest createFurnitureItemRequest() {
-        AddItemRequest request = new AddItemRequest();
-        request.setItemId(1);
-        request.setCategoryId(Constants.FURNITURE_CATEGORY_ID);
-        request.setSellerId(3);
-        request.setPrice(10.0);
-        request.setQuantity(1);
-        return request;
-    }
-
-    public static AddItemRequest createElectronicItemRequest() {
-        AddItemRequest request = new AddItemRequest();
-        request.setItemId(1);
-        request.setCategoryId(Constants.ELECTRONIC_CATEGORY_ID);
-        request.setSellerId(3);
-        request.setPrice(10.0);
-        request.setQuantity(1);
-        return request;
-    }
-
     public static AddItemRequest createPromotedCategoryIdItemRequest() {
         AddItemRequest request = new AddItemRequest();
         request.setItemId(1);
@@ -142,7 +143,7 @@ public class TestHelper {
 
     public static AddVasItemRequest createValidVasItemRequest() {
         AddVasItemRequest request = new AddVasItemRequest();
-        request.setItemId(1);
+        request.setItemId(2);
         request.setVasItemId(2);
         request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
         request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
@@ -156,9 +157,9 @@ public class TestHelper {
         AddVasItemRequest request = new AddVasItemRequest();
         request.setItemId(1);
         request.setVasItemId(2);
-        request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
+        request.setVasCategoryId(1234);
         request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
-        request.setPrice(500.0);
+        request.setPrice(15.0);
         request.setQuantity(4);
         return request;
     }
@@ -169,7 +170,7 @@ public class TestHelper {
         request.setVasItemId(2);
         request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
         request.setVasSellerId(5005);
-        request.setPrice(1.0);
+        request.setPrice(15.0);
         request.setQuantity(1);
         return request;
     }
@@ -180,7 +181,7 @@ public class TestHelper {
         request.setVasItemId(2);
         request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
         request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
-        request.setPrice(500_0000.0);
+        request.setPrice(500.0);
         request.setQuantity(2);
         return request;
     }
@@ -191,7 +192,7 @@ public class TestHelper {
         request.setVasItemId(2);
         request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
         request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
-        request.setPrice(500.0);
+        request.setPrice(15.0);
         request.setQuantity(4);
         return request;
     }
