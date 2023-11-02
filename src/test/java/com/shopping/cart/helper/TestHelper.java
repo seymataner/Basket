@@ -4,6 +4,7 @@ import com.shopping.cart.dto.request.AddItemRequest;
 import com.shopping.cart.dto.request.AddVasItemRequest;
 import com.shopping.cart.model.Cart;
 import com.shopping.cart.model.Item;
+import com.shopping.cart.model.VasItem;
 import com.shopping.cart.utils.Constants;
 
 import java.util.ArrayList;
@@ -36,6 +37,17 @@ public class TestHelper {
     public static Item createSampleItem2() {
         Item item = new Item();
         item.setItemId(2);
+        item.setCategoryId(Constants.FURNITURE_CATEGORY_ID);
+        item.setSellerId(3);
+        item.setPrice(10.0);
+        item.setQuantity(1);
+        item.setVasItems(new ArrayList<>());
+        return item;
+    }
+
+    public static Item createSampleItem3() {
+        Item item = new Item();
+        item.setItemId(1);
         item.setCategoryId(1234);
         item.setSellerId(3);
         item.setPrice(10.0);
@@ -44,11 +56,60 @@ public class TestHelper {
         return item;
     }
 
+    public static Item createSampleItem4() {
+        Item item = new Item();
+        item.setItemId(1);
+        item.setCategoryId(2);
+        item.setSellerId(3);
+        item.setPrice(500_005.0);
+        item.setQuantity(1);
+        item.setVasItems(new ArrayList<>());
+        return item;
+    }
+
+    public static Item createSampleHighPriceItem() {
+        Item item = new Item();
+        item.setItemId(1);
+        item.setCategoryId(2);
+        item.setSellerId(3);
+        item.setPrice(500_005.0);
+        item.setQuantity(1);
+        item.setVasItems(new ArrayList<>());
+        return item;
+    }
+
+    public static VasItem createSampleHighPriceVasItem() {
+        VasItem vasItem = new VasItem();
+        vasItem.setItemId(1);
+        vasItem.setVasItemId(2);
+        vasItem.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
+        vasItem.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
+        vasItem.setPrice(500_000.0);
+        vasItem.setQuantity(1);
+        return vasItem;
+    }
+
+
+
 
     public static List<Item> createUniqueItems() {
 
         return IntStream.range(1, 11)
-                .mapToObj(i -> new Item(i, 100 + i, 200 + i, 19.99 * i, 1, new ArrayList<>()))
+                .mapToObj(i -> new Item(i, 100 + i, 200 + i, 100.00, 1, new ArrayList<>()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Item> createSameSellerIdItems() {
+
+        return IntStream.range(1, 11)
+                .mapToObj(i -> new Item(i, 100 + i, 200, 10.00, 1, new ArrayList<>()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<Item> createSameCategoryIdItems() {
+
+        return IntStream.range(1, 11)
+                .mapToObj(i -> new Item(i, 100, 200 + i, 10.00, 1, new ArrayList<>()))
                 .collect(Collectors.toList());
     }
 
@@ -75,7 +136,7 @@ public class TestHelper {
         request.setCategoryId(1234);
         request.setSellerId(3);
         request.setPrice(10.0);
-        request.setQuantity(5);
+        request.setQuantity(1);
         return request;
     }
 
@@ -144,6 +205,17 @@ public class TestHelper {
     public static AddVasItemRequest createValidVasItemRequest() {
         AddVasItemRequest request = new AddVasItemRequest();
         request.setItemId(2);
+        request.setVasItemId(2);
+        request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
+        request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);
+        request.setPrice(10.0);
+        request.setQuantity(1);
+        return request;
+    }
+
+    public static AddVasItemRequest createValidVasItemRequestForAddVasItem() {
+        AddVasItemRequest request = new AddVasItemRequest();
+        request.setItemId(1);
         request.setVasItemId(2);
         request.setVasCategoryId(Constants.VAS_ITEM_CATEGORY_ID);
         request.setVasSellerId(Constants.VAS_ITEM_SELLER_ID);

@@ -26,6 +26,7 @@ public class CartControllerTest {
 
     @MockBean
     private CartService cartService;
+    private static final int TEST_ITEM_ID = 1234;
 
     @Test
     public void testDisplayCart() throws Exception {
@@ -68,7 +69,7 @@ public class CartControllerTest {
     public void testRemoveItem() throws Exception {
 
         RemoveItemRequest mockRequest = new RemoveItemRequest();
-        mockRequest.setItemId(1234);
+        mockRequest.setItemId(TEST_ITEM_ID);
         RemoveItemResponse mockResponse = new RemoveItemResponse();
         Mockito.when(cartService.removeItem(mockRequest)).thenReturn(mockResponse);
 
@@ -88,6 +89,7 @@ public class CartControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
+
     public static String asJsonString(final Object obj) {
         try {
             return new ObjectMapper().writeValueAsString(obj);

@@ -50,6 +50,8 @@ public class PromotionService {
             promotion.setTotalDiscount(calculateDefaultTotalPrice() * 0.1);
             promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice() * 0.9);
         }
+        promotion.setTotalDiscount(0.0);
+        promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice());
 
         return promotion;
     }
@@ -57,12 +59,15 @@ public class PromotionService {
     private Promotion calculateCategoryPromotion() {
         Promotion promotion = new Promotion();
         promotion.setPromotionId(Constants.CATEGORY_PROMOTION_ID);
+        double totalDiscount = 0.0;
         List<Item> filteredItems = cart.getItems().stream()
                 .filter(item -> Objects.equals(item.getCategoryId(), Constants.DISCOUNTED_CATEGORY_ID))
                 .collect(Collectors.toList());
-        double totalDiscount = filteredItems.stream()
-                .mapToDouble(item -> item.getPrice() * item.getQuantity() * 0.05)
-                .sum();
+        if(filteredItems.size() > 0 ) {
+            totalDiscount = filteredItems.stream()
+                    .mapToDouble(item -> item.getPrice() * item.getQuantity() * 0.05)
+                    .sum();
+        }
         promotion.setTotalDiscount(totalDiscount);
         promotion.setTotalDiscountedAmount(calculateDefaultTotalPrice() - totalDiscount);
         return promotion;

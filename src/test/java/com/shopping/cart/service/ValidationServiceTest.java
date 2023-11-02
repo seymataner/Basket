@@ -106,10 +106,10 @@ public class ValidationServiceTest {
 
     @Test
     public void testCheckVasItemNotAllowedCategory() {
-        cart.getItems().add(TestHelper.createSampleItem2());
+        cart.getItems().add(TestHelper.createSampleItem3());
         AddVasItemRequest request = TestHelper.createValidVasItemRequest();
 
-        assertThrows(VasItemNotAllowedCategoryException.class, () -> validationService.validateAddVasItem(cart, TestHelper.createSampleItem2(), null, request));
+        assertThrows(VasItemNotAllowedCategoryException.class, () -> validationService.validateAddVasItem(cart, TestHelper.createSampleItem3(), null, request));
 
     }
 }
